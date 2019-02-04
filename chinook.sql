@@ -11,19 +11,38 @@
 
 
 -- #1: Provide a query showing Customers (just their full names, customer ID and country) who are not in the US.
-
-SELECT CustomerId, FirstName, LastName, Country FROM Customer c
+SELECT CustomerId, FirstName, LastName, Country
+FROM Customer
 WHERE Country != 'USA'
 
--- brazil_customers.sql: Provide a query only showing the Customers from Brazil.
+-- #2: Provide a query only showing the Customers from Brazil.
+SELECT CustomerId, FirstName, LastName, Country
+FROM Customer
+WHERE Country = 'Brazil'
 
--- brazil_customers_invoices.sql: Provide a query showing the Invoices of customers who are from Brazil. The resultant table should show the customer's full name, Invoice ID, Date of the invoice and billing country.
+-- #3: Provide a query showing the Invoices of customers who are from Brazil. The resultant table should show the customer's full name, Invoice ID, Date of the invoice and billing country.
+SELECT i.InvoiceId, i.InvoiceDate
+FROM Invoice i
+INNER JOIN Customers c ON i.CustomerId=c.CustomerId
 
--- sales_agents.sql: Provide a query showing only the Employees who are Sales Agents.
+-- #4: Provide a query showing only the Employees who are Sales Agents.
+SELECT c.FirstName, c.LastName, i.InvoiceId, i.InvoiceDate, i.BillingCountry
+FROM Invoice i
+INNER JOIN Customer c ON i.CustomerId=c.CustomerId
+WHERE c.Country = 'Brazil'
 
--- unique_invoice_countries.sql: Provide a query showing a unique/distinct list of billing countries from the Invoice table.
+-- #5: Provide a query showing a unique/distinct list of billing countries from the Invoice table.
+--  (ordered alphabetically)
+SELECT DISTINCT i.BillingCountry
+FROM Invoice i
+ORDER BY BillingCountry
 
--- sales_agent_invoices.sql: Provide a query that shows the invoices associated with each sales agent. The resultant table should include the Sales Agent's full name.
+-- #6: Provide a query that shows the invoices associated with each sales agent. The resultant table should include the Sales Agent's full name.
+-- (added customer name and used 'AS' to rename table columns)
+SELECT i.InvoiceId, e.FirstName AS AgentFirstName, e.LastName AS AgentLastName, c.FirstName AS CustomerFirstName, c.LastName AS CustomerLastName
+FROM Invoice i
+JOIN Customer c ON i.CustomerId=c.CustomerId
+JOIN Employee e ON c.SupportRepId = e.EmployeeId
 
 -- invoice_totals.sql: Provide a query that shows the Invoice Total, Customer name, Country and Sale Agent name for all invoices and customers.
 
